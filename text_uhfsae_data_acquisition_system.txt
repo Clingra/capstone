@@ -1,0 +1,1448 @@
+classdef uhfsae_data_acquisition_system < matlab.apps.AppBase
+
+    % Properties that correspond to app components
+    properties (Access = public)
+        UIFigure                      matlab.ui.Figure
+        GridLayout                    matlab.ui.container.GridLayout
+        LeftPanel                     matlab.ui.container.Panel
+        ArduinoConnectionPanel        matlab.ui.container.Panel
+        ConnectButton                 matlab.ui.control.Button
+        ArduinoDropDownLabel          matlab.ui.control.Label
+        ArduinoDropDown               matlab.ui.control.DropDown
+        SerialPortEditFieldLabel      matlab.ui.control.Label
+        SerialPortEditField           matlab.ui.control.EditField
+        ConnectionLamp                matlab.ui.control.Lamp
+        TextArea                      matlab.ui.control.TextArea
+        LoadCellGroup                 matlab.ui.container.TabGroup
+        FrontLeftTab                  matlab.ui.container.Tab
+        DataOutPinEditFieldLabel      matlab.ui.control.Label
+        FLDataOutPinEditField         matlab.ui.control.EditField
+        ClockSCKPinEditFieldLabel     matlab.ui.control.Label
+        FLClockSCKPinEditField        matlab.ui.control.EditField
+        TareValueEditFieldLabel       matlab.ui.control.Label
+        FLTareValueEditField          matlab.ui.control.NumericEditField
+        ScaleFactorEditFieldLabel     matlab.ui.control.Label
+        FLScaleFactorEditField        matlab.ui.control.NumericEditField
+        MaxLoadgEditFieldLabel        matlab.ui.control.Label
+        FLMaxLoadgEditField           matlab.ui.control.NumericEditField
+        FLTareButton                  matlab.ui.control.Button
+        FLCalibrateButton             matlab.ui.control.Button
+        KnownWeightgLabel             matlab.ui.control.Label
+        FLKnownWeightgEditField       matlab.ui.control.NumericEditField
+        FrontRightTab                 matlab.ui.container.Tab
+        DataOutPinEditFieldLabel_2    matlab.ui.control.Label
+        FRDataOutPinEditField         matlab.ui.control.EditField
+        ClockSCKPinEditFieldLabel_2   matlab.ui.control.Label
+        FRClockSCKPinEditField        matlab.ui.control.EditField
+        TareValueEditFieldLabel_2     matlab.ui.control.Label
+        FRTareValueEditField          matlab.ui.control.NumericEditField
+        ScaleFactorEditFieldLabel_2   matlab.ui.control.Label
+        FRScaleFactorEditField        matlab.ui.control.NumericEditField
+        MaxLoadgEditFieldLabel_2      matlab.ui.control.Label
+        FRMaxLoadgEditField           matlab.ui.control.NumericEditField
+        FRTareButton                  matlab.ui.control.Button
+        FRCalibrateButton             matlab.ui.control.Button
+        KnownWeightgLabel_2           matlab.ui.control.Label
+        FRKnownWeightgEditField       matlab.ui.control.NumericEditField
+        RearLeftTab                   matlab.ui.container.Tab
+        DataOutPinEditFieldLabel_3    matlab.ui.control.Label
+        RLDataOutPinEditField         matlab.ui.control.EditField
+        ClockSCKPinEditFieldLabel_3   matlab.ui.control.Label
+        RLClockSCKPinEditField        matlab.ui.control.EditField
+        TareValueEditFieldLabel_3     matlab.ui.control.Label
+        RLTareValueEditField          matlab.ui.control.NumericEditField
+        ScaleFactorEditFieldLabel_3   matlab.ui.control.Label
+        RLScaleFactorEditField        matlab.ui.control.NumericEditField
+        MaxLoadgEditFieldLabel_3      matlab.ui.control.Label
+        RLMaxLoadgEditField           matlab.ui.control.NumericEditField
+        RLTareButton                  matlab.ui.control.Button
+        RLCalibrateButton             matlab.ui.control.Button
+        KnownWeightgLabel_3           matlab.ui.control.Label
+        RLKnownWeightgEditField       matlab.ui.control.NumericEditField
+        RearRightTab                  matlab.ui.container.Tab
+        DataOutPinEditFieldLabel_4    matlab.ui.control.Label
+        RRDataOutPinEditField         matlab.ui.control.EditField
+        ClockSCKPinEditFieldLabel_4   matlab.ui.control.Label
+        RRClockSCKPinEditField        matlab.ui.control.EditField
+        TareValueEditFieldLabel_4     matlab.ui.control.Label
+        RRTareValueEditField          matlab.ui.control.NumericEditField
+        ScaleFactorEditFieldLabel_4   matlab.ui.control.Label
+        RRScaleFactorEditField        matlab.ui.control.NumericEditField
+        MaxLoadgEditFieldLabel_4      matlab.ui.control.Label
+        RRMaxLoadgEditField           matlab.ui.control.NumericEditField
+        RRTareButton                  matlab.ui.control.Button
+        RRCalibrateButton             matlab.ui.control.Button
+        KnownWeightgLabel_4           matlab.ui.control.Label
+        RRKnownWeightgEditField       matlab.ui.control.NumericEditField
+        Panel                         matlab.ui.container.Panel
+        FLReceiveDataButton           matlab.ui.control.Button
+        FLDataLamp                    matlab.ui.control.Lamp
+        FLStopDataButton              matlab.ui.control.Button
+        PauseReadingsButton           matlab.ui.control.Button
+        ResumeReadingsButton          matlab.ui.control.Button
+        CenterPanel                   matlab.ui.container.Panel
+        FLLoadCell                    matlab.ui.control.NumericEditField
+        RetrieveRawValueButton        matlab.ui.control.Button
+        UIAxes                        matlab.ui.control.UIAxes
+        FLLabel                       matlab.ui.control.Label
+        LoadCellLabel                 matlab.ui.control.Label
+        UITable                       matlab.ui.control.Table
+        FRLoadCell                    matlab.ui.control.NumericEditField
+        FRLabel                       matlab.ui.control.Label
+        RLLoadCell                    matlab.ui.control.NumericEditField
+        RLLabel                       matlab.ui.control.Label
+        RRLoadCell                    matlab.ui.control.NumericEditField
+        RRLabel                       matlab.ui.control.Label
+        RightPanel                    matlab.ui.container.Panel
+        TorsionalRigidityCalculationPanel  matlab.ui.container.Panel
+        GetTorsionalRigidityButton    matlab.ui.control.Button
+        TorsionalRigidityOutput       matlab.ui.control.NumericEditField
+        DeformationAngleLabel         matlab.ui.control.Label
+        DeformationAngle1EditField    matlab.ui.control.NumericEditField
+        Button                        matlab.ui.control.StateButton
+        Button_2                      matlab.ui.control.StateButton
+        Button_3                      matlab.ui.control.StateButton
+        DialIndicatorsLabel           matlab.ui.control.Label
+        DeformationAngle1EditField_2  matlab.ui.control.NumericEditField
+        FLabel                        matlab.ui.control.Label
+        RLabel                        matlab.ui.control.Label
+        SaveLamp                      matlab.ui.control.Lamp
+        SaveAllValuestoExcelSheetsLabel  matlab.ui.control.Label
+        SaveTorsionalRigidity         matlab.ui.control.Switch
+        LoadCellValuesandTorsionalRigidityValueswithTimeLabel  matlab.ui.control.Label
+        DialIndicatorSettingsPanel    matlab.ui.container.Panel
+        TabGroup                      matlab.ui.container.TabGroup
+        Tab                           matlab.ui.container.Tab
+        DialIndicatorDisplacementsInLabel  matlab.ui.control.Label
+        FrontLeftLabel                matlab.ui.control.Label
+        FLDialIndicator               matlab.ui.control.NumericEditField
+        FrontRightLabel               matlab.ui.control.Label
+        FRDialIndicator               matlab.ui.control.NumericEditField
+        RearLeftLabel                 matlab.ui.control.Label
+        RLDialIndicator               matlab.ui.control.NumericEditField
+        RearRightLabel                matlab.ui.control.Label
+        RRDialIndicator               matlab.ui.control.NumericEditField
+        ResetDisplacedValuesButton    matlab.ui.control.Button
+        DistanceBetweenDialIndicatorsinEditFieldLabel  matlab.ui.control.Label
+        FrontDialIndicatorDistance    matlab.ui.control.NumericEditField
+        FrontLabel_2                  matlab.ui.control.Label
+        RearLabel                     matlab.ui.control.Label
+        RearDialIndicatorDistance     matlab.ui.control.NumericEditField
+        DistanceBetweenHubsinLabel    matlab.ui.control.Label
+        FrontHubDistance              matlab.ui.control.NumericEditField
+        FrontLabel_3                  matlab.ui.control.Label
+        RearLabel_2                   matlab.ui.control.Label
+        RearHubDistance               matlab.ui.control.NumericEditField
+        Tab_2                         matlab.ui.container.Tab
+        Tab_3                         matlab.ui.container.Tab
+    end
+
+    % Properties that correspond to apps with auto-reflow
+    properties (Access = private)
+        onePanelWidth = 576;
+        twoPanelWidth = 768;
+    end
+
+    
+    properties (Access = private)
+        ard % The arduino
+        type % The arduino type
+        serial % The port that the arduino is using, ex. 'COM3'
+        connected % Connection status
+        loadCell1 % Load cells 1-4
+        loadCell2
+        loadCell3
+        loadCell4
+        tareReady = 0 % Counter for starting tare function
+        tareN = 10 % number of readings for tare Value
+        calibrateReady = 0 % Counter for starting calibration function
+        calN = 10 % number of readings for calibration Value
+        FLscalar = 0 % Value to scale readings to max weight of load cell
+        FRscalar = 0
+        RLscalar = 0
+        RRscalar = 0
+        knownWeight % a weight in grams used to calibrate the load cell
+        FLdataReady = 0 % a number that allows the data reading of the FL load cell to be toggled
+        FRdataReady = 0 % "" for FR load cell
+        RLdataReady = 0
+        RRdataReady = 0
+        activeLoadCells % count of load cells displaying data
+        pauseValue = 0 % a way to pause and unpause data collection/plotting
+        torsionalRigidity = 0 %the torsional rigidity, equation is below
+        % (Ct=(Load Cell Force (FL Hub) * (½ * distance between "Jack Screws"))/
+        % (arctan[(displacement dial indicator (FL Hub) + displacement dial indicator (FR Hub))/Distance between dial indicators])
+        hubDistanceFront % distance between jack screws in the front
+        hubDistanceRear % same for rear
+        dialIndDistance % distance between dial indicators
+        deformationAngleFront % angle of deformation between dial indicators
+        deformationAngleRear % "" rear
+        torque % torque
+        torsionalRigidityTable %table of Values in the displayed table
+        xVals % time Values from graph for export
+        yVals1 % load cell 1 (FL) Values from graph for export
+        yVals2 % load cell 2 (FR) Values from graph for export
+        yVals3 % "" RL
+        yVals4 % "" RR
+    end
+    
+    properties (Access = public)
+        FLtareValue = 0;
+        FRtareValue = 0;
+        RLtareValue = 0;
+        RRtareValue = 0;
+    end
+    
+
+    % Callbacks that handle component events
+    methods (Access = private)
+
+        % Code that executes after component creation
+        function startupFcn(app)
+            app.UIFigure.Name = 'UH FSAE Torsional Rigidity Calculator';
+        end
+
+        % Button pushed function: ConnectButton
+        function ConnectButtonPushed(app, event)
+            app.TextArea.Value = 'Please Wait for Connection Confirmation.';
+            app.serial = app.SerialPortEditField.Value;
+            app.type=app.ArduinoDropDown.Value;
+            app.ard = arduino(app.serial,app.type,'libraries',{'basicHX711/basic_HX711'});
+            % Pins [D4 and D5],[D2 and D3],[D7 and D6],[D8 and D9] are data (Serial Data Output[DOUT]) then clock (Serial Clock Input[SCK])
+            app.loadCell1 = addon(app.ard,'basicHX711/basic_HX711',{app.FLDataOutPinEditField.Value,app.FLClockSCKPinEditField.Value});
+            app.TextArea.Value = '1st Load Cell connected.';
+            app.loadCell2 = addon(app.ard,'basicHX711/basic_HX711',{app.FRDataOutPinEditField.Value,app.FRClockSCKPinEditField.Value}); % load cell 2
+            app.TextArea.Value = '2nd Load cell connected.';
+            app.loadCell3 = addon(app.ard,'basicHX711/basic_HX711',{app.RLDataOutPinEditField.Value,app.RLClockSCKPinEditField.Value});
+            app.TextArea.Value = '3rd Load Cell connected.';
+            app.loadCell4 = addon(app.ard,'basicHX711/basic_HX711',{app.RRDataOutPinEditField.Value,app.RRClockSCKPinEditField.Value});
+            app.TextArea.Value = '4th Load Cell connected.';
+            app.ConnectionLamp.Color = [0 1 0 ];
+            app.TextArea.Value = 'Connected.';
+            app.activeLoadCells = 0;
+        end
+
+        % Changes arrangement of the app based on UIFigure width
+        function updateAppLayout(app, event)
+            currentFigureWidth = app.UIFigure.Position(3);
+            if(currentFigureWidth <= app.onePanelWidth)
+                % Change to a 3x1 grid
+                app.GridLayout.RowHeight = {480, 480, 480};
+                app.GridLayout.ColumnWidth = {'1x'};
+                app.CenterPanel.Layout.Row = 1;
+                app.CenterPanel.Layout.Column = 1;
+                app.LeftPanel.Layout.Row = 2;
+                app.LeftPanel.Layout.Column = 1;
+                app.RightPanel.Layout.Row = 3;
+                app.RightPanel.Layout.Column = 1;
+            elseif (currentFigureWidth > app.onePanelWidth && currentFigureWidth <= app.twoPanelWidth)
+                % Change to a 2x2 grid
+                app.GridLayout.RowHeight = {480, 480};
+                app.GridLayout.ColumnWidth = {'1x', '1x'};
+                app.CenterPanel.Layout.Row = 1;
+                app.CenterPanel.Layout.Column = [1,2];
+                app.LeftPanel.Layout.Row = 2;
+                app.LeftPanel.Layout.Column = 1;
+                app.RightPanel.Layout.Row = 2;
+                app.RightPanel.Layout.Column = 2;
+            else
+                % Change to a 1x3 grid
+                app.GridLayout.RowHeight = {'1x'};
+                app.GridLayout.ColumnWidth = {220, '1x', 229};
+                app.LeftPanel.Layout.Row = 1;
+                app.LeftPanel.Layout.Column = 1;
+                app.CenterPanel.Layout.Row = 1;
+                app.CenterPanel.Layout.Column = 2;
+                app.RightPanel.Layout.Row = 1;
+                app.RightPanel.Layout.Column = 3;
+            end
+        end
+
+        % Button pushed function: FLTareButton
+        function FLTareButtonPushed(app, event)
+            if app.tareReady < 1
+                app.TextArea.Value = 'Please confirm weight is off loadcell for taring, then click tare again.';
+                app.tareReady = app.tareReady+1;
+            else
+                app.TextArea.Value = 'Calculating tare Value. Please wait.';
+                x=zeros(app.tareN,1);
+                for i = 1:app.tareN
+                    x(i) = abs(read_HX711(app.loadCell1));
+                    pause(1/100);
+                end
+                app.FLtareValue = sum(x)/app.tareN;
+                app.FLTareValueEditField.Value = app.FLtareValue;
+                app.TextArea.Value = 'Tare Value is calculated and displayed in the tare field.';
+            end
+        end
+
+        % Button pushed function: FRTareButton
+        function FRTareButtonPushed(app, event)
+            if app.tareReady < 1
+                app.TextArea.Value = 'Please confirm weight is off loadcell for taring, then click tare again.';
+                app.tareReady = app.tareReady+1;
+            else
+                app.TextArea.Value = 'Calculating tare Value. Please wait.';
+                x=zeros(app.tareN,1);
+                for i = 1:app.tareN
+                    x(i) = abs(read_HX711(app.loadCell2));
+                    pause(1/100);
+                end
+                app.FRtareValue = sum(x)/app.tareN;
+                app.FRTareValueEditField.Value = app.FRtareValue;
+                app.TextArea.Value = 'Tare Value is calculated and displayed in the tare field.';
+            end
+        end
+
+        % Button pushed function: RLTareButton
+        function RLTareButtonPushed(app, event)
+            if app.tareReady < 1
+                app.TextArea.Value = 'Please confirm weight is off loadcell for taring, then click tare again.';
+                app.tareReady = app.tareReady+1;
+            else
+                app.TextArea.Value = 'Calculating tare Value. Please wait.';
+                x=zeros(app.tareN,1);
+                for i = 1:app.tareN
+                    x(i) = abs(read_HX711(app.loadCell3));
+                    pause(1/100);
+                end
+                app.RLtareValue = sum(x)/app.tareN;
+                app.RLTareValueEditField.Value = app.RLtareValue;
+                app.TextArea.Value = 'Tare Value is calculated and displayed in the tare field.';
+            end
+        end
+
+        % Button pushed function: RRTareButton
+        function RRTareButtonPushed(app, event)
+            if app.tareReady < 1
+                app.TextArea.Value = 'Please confirm weight is off loadcell for taring, then click tare again.';
+                app.tareReady = app.tareReady+1;
+            else
+                app.TextArea.Value = 'Calculating tare Value. Please wait.';
+                x=zeros(app.tareN,1);
+                for i = 1:app.tareN
+                    x(i) = abs(read_HX711(app.loadCell4));
+                    pause(1/100);
+                end
+                app.RRtareValue = sum(x)/app.tareN;
+                app.RRTareValueEditField.Value = app.RRtareValue;
+                app.TextArea.Value = 'Tare Value is calculated and displayed in the tare field.';
+            end
+        end
+
+        % Button pushed function: FLCalibrateButton
+        function FLCalibrateButtonPushed(app, event)
+            if app.calibrateReady < 1
+                app.TextArea.Value = 'Please place a known weight on the load cell and enter its weight in grams.';
+                app.calibrateReady = app.calibrateReady+1;
+            else
+                app.TextArea.Value = 'Beginning calibration.';
+                y=zeros(app.calN,1);
+                for j = 1:app.calN
+                   y(j) = abs(read_HX711(app.loadCell1));
+                   pause(1/100);
+                end
+                if app.FLKnownWeightgEditField.Value > 0
+                    app.FLscalar = abs(((sum(y)/app.calN)-app.FLtareValue))/app.FLKnownWeightgEditField.Value;
+                    app.FLScaleFactorEditField.Value = app.FLscalar;
+                    app.TextArea.Value = 'The load cell is calibrated.';
+                else
+                    app.TextArea.Value = 'You need to input a known weight for the load cell.';
+                end
+            end
+        end
+
+        % Button pushed function: FRCalibrateButton
+        function FRCalibrateButtonPushed(app, event)
+            if app.calibrateReady < 1
+                app.TextArea.Value = 'Please place a known weight on the load cell and enter its weight in grams. Press calibrate when ready.';
+                app.calibrateReady = app.calibrateReady+1;
+            else
+                app.TextArea.Value = 'Beginning calibration.';
+                y=zeros(app.calN,1);
+                for j = 1:app.calN
+                   y(j) = abs(read_HX711(app.loadCell2));
+                   pause(1/100);
+                end
+                if app.FRKnownWeightgEditField.Value > 0
+                    app.FRscalar = abs(((sum(y)/app.calN)-app.FRtareValue))/app.FRKnownWeightgEditField.Value;
+                    app.FRScaleFactorEditField.Value = app.FRscalar;
+                    app.TextArea.Value = 'The load cell is calibrated.';
+                else
+                    app.TextArea.Value = 'You need to input a known weight for the load cell.';
+                end
+            end
+        end
+
+        % Button pushed function: RLCalibrateButton
+        function RLCalibrateButtonPushed(app, event)
+            if app.calibrateReady < 1
+                app.TextArea.Value = 'Please place a known weight on the load cell and enter its weight in grams. Press calibrate when ready.';
+                app.calibrateReady = app.calibrateReady+1;
+            else
+                app.TextArea.Value = 'Beginning calibration.';
+                y=zeros(app.calN,1);
+                for j = 1:app.calN
+                   y(j) = abs(read_HX711(app.loadCell3));
+                   pause(1/100);
+                end
+                if app.RLKnownWeightgEditField.Value > 0
+                    app.RLscalar = abs(((sum(y)/app.calN)-app.RLtareValue))/app.RLKnownWeightgEditField.Value;
+                    app.RLScaleFactorEditField.Value = app.RLscalar;
+                    app.TextArea.Value = 'The load cell is calibrated.';
+                else
+                    app.TextArea.Value = 'You need to input a known weight for the load cell.';
+                end
+            end
+        end
+
+        % Button pushed function: RRCalibrateButton
+        function RRCalibrateButtonPushed(app, event)
+            if app.calibrateReady < 1
+                app.TextArea.Value = 'Please place a known weight on the load cell and enter its weight in grams. Press calibrate when ready.';
+                app.calibrateReady = app.calibrateReady+1;
+            else
+                app.TextArea.Value = 'Beginning calibration.';
+                y=zeros(app.calN,1);
+                for j = 1:app.calN
+                   y(j) = abs(read_HX711(app.loadCell4));
+                   pause(1/100);
+                end
+                if app.RRKnownWeightgEditField.Value > 0
+                    app.RRscalar = abs(((sum(y)/app.calN)-app.RRtareValue))/app.RRKnownWeightgEditField.Value;
+                    app.RRScaleFactorEditField.Value = app.RRscalar;
+                    app.TextArea.Value = 'The load cell is calibrated.';
+                else
+                    app.TextArea.Value = 'You need to input a known weight for the load cell.';
+                end
+            end
+        end
+
+        % Button pushed function: FLReceiveDataButton
+        function FLReceiveDataButtonPushed(app, event)
+            app.TextArea.Value = 'Attempting to read data.';
+            app.FLdataReady=1;
+            app.pauseValue=1;
+            if app.FLtareValue == 0
+                app.FLtareValue = app.FLTareValueEditField.Value;
+            end
+            if app.FLscalar == 0
+                app.FLscalar = app.FLScaleFactorEditField.Value;
+            end
+            if app.FRtareValue == 0
+                app.FRtareValue = app.FRTareValueEditField.Value;
+            end
+            if app.FRscalar == 0
+                app.FRscalar = app.FRScaleFactorEditField.Value;
+            end
+            if app.RLtareValue == 0
+                app.RLtareValue = app.RLTareValueEditField.Value;
+            end
+            if app.RLscalar == 0
+                app.RLscalar = app.RLScaleFactorEditField.Value;
+            end
+            if app.RRtareValue == 0
+                app.RRtareValue = app.RRTareValueEditField.Value;
+            end
+            if app.RRscalar == 0
+                app.RRscalar = app.RRScaleFactorEditField.Value;
+            end
+            y=[];
+            y2=[];
+            y3=[];
+            y4=[];
+            x=[];
+            tic();
+            hold(app.UIAxes,'on')
+            while mod(app.FLdataReady,2) 
+                if mod(app.pauseValue,2)
+                    app.TextArea.Value = 'Reading data.';
+                    app.activeLoadCells = app.activeLoadCells + 1;
+                    app.FLDataLamp.Color = [0 1 0];
+                    
+                    %plotting FL load cell
+                    y=[y,(abs(read_HX711(app.loadCell1))-app.FLtareValue)/app.FLscalar]; %#ok<AGROW> 
+                    x=[x,toc()]; %#ok<AGROW> 
+                    app.FLLoadCell.Value=(abs(read_HX711(app.loadCell1))-app.FLtareValue)/app.FLscalar;
+                    plot(app.UIAxes,x,y,'g');
+                    
+                    %plotting FR load cell
+                    y2=[y2,abs((read_HX711(app.loadCell2))-app.FRtareValue)/app.FRscalar]; %#ok<AGROW> 
+                    app.FRLoadCell.Value=(abs(read_HX711(app.loadCell2))-app.FRtareValue)/app.FRscalar;
+                    plot(app.UIAxes,x,y2,'b');
+                    
+                    %plotting RL load cell
+                    y3=[y3,abs((read_HX711(app.loadCell3))-app.RLtareValue)/app.RLscalar]; %#ok<AGROW> 
+                    app.RLLoadCell.Value=(abs(read_HX711(app.loadCell3))-app.RLtareValue)/app.RLscalar;
+                    plot(app.UIAxes,x,y3,'r');
+                    
+                    %plotting RR load cell
+                    y4=[y4,abs((read_HX711(app.loadCell4))-app.RRtareValue)/app.RRscalar]; %#ok<AGROW> 
+                    app.RRLoadCell.Value=(abs(read_HX711(app.loadCell4))-app.RRtareValue)/app.RRscalar;
+                    plot(app.UIAxes,x,y4,'c');
+                    
+                    %calculation of deformation angle
+                    %
+                    %commented out old method of calculation
+                    %
+                     %app.deformationAngle = abs(rad2deg(atan((abs(app.RLDialIndicator.Value-app.RRDialIndicator.Value)...
+                     % -abs(app.FLDialIndicator.Value-app.FRDialIndicatorEditField.Value))...
+                     % /app.FrontDialIndicatorDistance.Value)));
+                     % app.DeformationAngle1EditField.Value = app.deformationAngle;
+                    app.deformationAngleFront = rad2deg(atan(abs(app.FLDialIndicator.Value-app.FRDialIndicator.Value)/app.FrontDialIndicatorDistance.Value));
+                    app.DeformationAngle1EditField.Value = app.deformationAngleFront;
+                    app.deformationAngleRear = rad2deg(atan(abs(app.RLDialIndicator.Value-app.RRDialIndicator.Value)/app.RearDialIndicatorDistance.Value));
+                    app.DeformationAngle1EditField_2.Value = app.deformationAngleRear;
+                    
+                    %Values to be saved in excel
+                    app.xVals=x;
+                    app.yVals1=y;
+                    app.yVals2=y;
+                    app.yVals3=y;
+                    app.yVals4=y;
+                else
+                    app.TextArea.Value = 'Data reading paused.';
+                    pause(1/100);
+                end
+            end
+        end
+
+        % Button pushed function: FLStopDataButton
+        function FLStopDataButtonPushed(app, event)
+            app.FLdataReady=app.FLdataReady + 1;
+            app.activeLoadCells = app.activeLoadCells - 1;
+            app.FLDataLamp.Color = [0 0 0];
+            app.TextArea.Value = 'Data reading is stopped.';
+        end
+
+        % Button pushed function: RetrieveRawValueButton
+        function RetrieveRawValueButtonPushed(app, event)
+            if app.FLtareValue == 0
+                app.FLtareValue = app.FLTareValueEditField.Value;
+            end
+            if app.FRtareValue == 0
+                app.FRtareValue = app.FRTareValueEditField.Value;
+            end
+            if app.FLscalar == 0
+                app.FLscalar = app.FLScaleFactorEditField.Value;
+            end
+            if app.FRscalar == 0
+                app.FRscalar = app.FRScaleFactorEditField.Value;
+            end
+            app.FLLoadCell.Value=(abs(read_HX711(app.loadCell1))-app.FLtareValue)/app.FLscalar;
+            app.FRLoadCell.Value=(abs(read_HX711(app.loadCell2))-app.FRtareValue)/app.FRscalar;
+            app.RLLoadCell.Value=(abs(read_HX711(app.loadCell3))-app.FLtareValue)/app.FLscalar;
+            app.RRLoadCell.Value=(abs(read_HX711(app.loadCell4))-app.FRtareValue)/app.FRscalar;            
+        end
+
+        % Button pushed function: PauseReadingsButton
+        function PauseReadingsButtonPushed(app, event)
+            app.TextArea.Value = 'Pausing data...';
+            app.pauseValue = app.pauseValue + 1;
+            app.FLDataLamp.Color = [0 0 1];
+        end
+
+        % Button pushed function: ResumeReadingsButton
+        function ResumeReadingsButtonPushed(app, event)
+            app.pauseValue = app.pauseValue + 1;
+            app.FLDataLamp.Color = [0 1 0];
+            app.TextArea.Value = 'Unpausing data.';
+        end
+
+        % Button pushed function: ResetDisplacedValuesButton
+        function ResetDisplacedValuesButtonPushed(app, event)
+            app.FLDialIndicator.Value = 0;
+            app.FRDialIndicator.Value = 0;
+            app.RLDialIndicator.Value = 0;
+            app.RRDialIndicator.Value = 0;
+            app.TextArea.Value = 'Displaced position Values were reset.';
+        end
+
+        % Button pushed function: GetTorsionalRigidityButton
+        function GetTorsionalRigidityButtonPushed(app, event)
+            
+            %~~~~~~~~~~~THIS NEEDS TO BE ADJUSTED BELOW~~~~~~~~~~~~~
+            %~~~~~~~~~~~THIS NEEDS TO BE ADJUSTED BELOW~~~~~~~~~~~~~
+            %~~~~~~~~~~~THIS NEEDS TO BE ADJUSTED BELOW~~~~~~~~~~~~~
+            %~~~~~~~~~~~THIS NEEDS TO BE ADJUSTED BELOW~~~~~~~~~~~~~
+             %old formula below on comments
+             %Ct=(Load Cell Force (FL Hub) * (½ * distance between "Jack Screws ))/
+             %(arctan[(displacement dial indicator (FL Hub) + displacement dial indicator (FR Hub))/Distance between dial indicators]
+             %app.TextArea.Value = 'Calculating torsional rigidity...';
+             %app.jackScrewDistanceFront = app.FrontHubDistance.Value;
+             %app.jackScrewDistanceRear = app.RearHubDistance;
+             %app.dialIndDistance = app.FrontDialIndicatorDistance.Value;
+                %averaging torque read at each load cell for accuracy
+             %app.torque = mean(abs(app.FLLoadCell.Value * 0.5 * app.jackScrewDistanceFront)+abs(app.FRLoadCell.Value * 0.5 * app.jackScrewDistanceFront))*0.0098066500286389*0.22480894387/12;
+                %converting in-g/deg to in-N/deg to ft-lbf/deg
+             %app.torsionalRigidity = (app.torque / app.deformationAngleFront);
+             
+             %new formula
+             app.TextArea.Value = 'Calculating torsional rigidity...'; %only using torque from front
+             app.torque = mean(abs(app.FLLoadCell.Value)+abs(app.FRLoadCell.Value))*(app.FrontHubDistance.Value/2);
+             %need to convert from in-g/deg to ft-lbf/deg
+             app.torque = app.torque*0.0098066500286389*0.22480894387/12;
+             app.torsionalRigidity = app.torque/(abs(app.DeformationAngle1EditField.Value)-abs(app.DeformationAngle1EditField_2.Value));
+             
+                %setting up the excel save
+            app.torsionalRigidityTable = [app.torsionalRigidityTable; toc() (abs(app.DeformationAngle1EditField.Value)-abs(app.DeformationAngle1EditField_2.Value)) app.torque app.torsionalRigidity];
+            app.UITable.Data = [app.torsionalRigidityTable];
+            app.UITable.ColumnFormat = {'bank' 'bank' 'bank' 'bank'};
+            app.TorsionalRigidityOutput.Value = app.torsionalRigidity;
+            app.TextArea.Value = 'Torsional rigidity has been calculated!';
+        end
+
+        % Value changed function: SaveTorsionalRigidity
+        function SaveTorsionalRigidityValueChanged(app, event)
+            app.TextArea.Value = 'Now saving...';
+            Value = app.SaveTorsionalRigidity.Value;
+            if Value == 'Yes' %#ok<BDSCA> 
+                app.FLDataLamp.Color = [0 0 1];
+                % checking for old files
+                if isfile('Torsional_Rigidity_Snapshot.xlsx')
+                    delete 'Torsional_Rigidity_Snapshot.xlsx';
+                    delete 'Load_Time_Values.xlsx';
+                end
+                writecell({'Time','Deformation Angle','Torque','Torsional Rigidity'},'Torsional_Rigidity_Snapshot.xlsx');
+                writematrix(app.UITable.Data,'Torsional_Rigidity_Snapshot.xlsx',"Range","A2");
+                writecell({'Time [s]','Load Cell 1 [g]', 'Load Cell 2 [g]', 'Load Cell 3 [g]', 'Load Cell 4 [g]'},'Load_Time_Values.xlsx');
+                writematrix([app.xVals', app.yVals1', app.yVals2', app.yVals3', app.yVals4'],'Load_Time_Values.xlsx',"Range","A2");
+                app.SaveTorsionalRigidity.Value = 'No';
+            end
+            app.FLDataLamp.Color = [0 1 0];
+            app.TextArea.Value = 'The files have been saved!';
+        end
+
+        % Value changed function: Button_3
+        function Button_3ValueChanged(app, event)
+            Value = app.Button_3.Value;
+            if Value == 1
+                app.Button_2.Value = 0;
+                app.Button.Value = 0;
+            end
+        end
+
+        % Value changed function: Button_2
+        function Button_2ValueChanged(app, event)
+            Value = app.Button_2.Value;
+            if Value == 1
+                app.Button_3.Value = 0;
+                app.Button.Value = 0;
+            end
+        end
+
+        % Value changed function: Button
+        function ButtonValueChanged(app, event)
+            Value = app.Button.Value;
+            if Value == 1
+                app.Button_2.Value = 0;
+                app.Button_3.Value = 0;
+            end
+        end
+    end
+
+    % Component initialization
+    methods (Access = private)
+
+        % Create UIFigure and components
+        function createComponents(app)
+
+            % Create UIFigure and hide until all components are created
+            app.UIFigure = uifigure('Visible', 'off');
+            app.UIFigure.AutoResizeChildren = 'off';
+            app.UIFigure.Position = [100 100 860 480];
+            app.UIFigure.Name = 'UI Figure';
+            app.UIFigure.SizeChangedFcn = createCallbackFcn(app, @updateAppLayout, true);
+
+            % Create GridLayout
+            app.GridLayout = uigridlayout(app.UIFigure);
+            app.GridLayout.ColumnWidth = {220, '1x', 229};
+            app.GridLayout.RowHeight = {'1x'};
+            app.GridLayout.ColumnSpacing = 0;
+            app.GridLayout.RowSpacing = 0;
+            app.GridLayout.Padding = [0 0 0 0];
+            app.GridLayout.Scrollable = 'on';
+
+            % Create LeftPanel
+            app.LeftPanel = uipanel(app.GridLayout);
+            app.LeftPanel.Layout.Row = 1;
+            app.LeftPanel.Layout.Column = 1;
+
+            % Create ArduinoConnectionPanel
+            app.ArduinoConnectionPanel = uipanel(app.LeftPanel);
+            app.ArduinoConnectionPanel.Title = 'Arduino Connection';
+            app.ArduinoConnectionPanel.Position = [0 300 220 120];
+
+            % Create ConnectButton
+            app.ConnectButton = uibutton(app.ArduinoConnectionPanel, 'push');
+            app.ConnectButton.ButtonPushedFcn = createCallbackFcn(app, @ConnectButtonPushed, true);
+            app.ConnectButton.Position = [18 13 100 22];
+            app.ConnectButton.Text = 'Connect';
+
+            % Create ArduinoDropDownLabel
+            app.ArduinoDropDownLabel = uilabel(app.ArduinoConnectionPanel);
+            app.ArduinoDropDownLabel.HorizontalAlignment = 'right';
+            app.ArduinoDropDownLabel.Position = [18 42 50 22];
+            app.ArduinoDropDownLabel.Text = 'Arduino:';
+
+            % Create ArduinoDropDown
+            app.ArduinoDropDown = uidropdown(app.ArduinoConnectionPanel);
+            app.ArduinoDropDown.Items = {'Uno', 'Mega'};
+            app.ArduinoDropDown.Position = [83 42 100 22];
+            app.ArduinoDropDown.Value = 'Uno';
+
+            % Create SerialPortEditFieldLabel
+            app.SerialPortEditFieldLabel = uilabel(app.ArduinoConnectionPanel);
+            app.SerialPortEditFieldLabel.HorizontalAlignment = 'right';
+            app.SerialPortEditFieldLabel.Position = [18 71 62 22];
+            app.SerialPortEditFieldLabel.Text = 'Serial Port';
+
+            % Create SerialPortEditField
+            app.SerialPortEditField = uieditfield(app.ArduinoConnectionPanel, 'text');
+            app.SerialPortEditField.Position = [95 71 100 22];
+            app.SerialPortEditField.Value = 'COM3';
+
+            % Create ConnectionLamp
+            app.ConnectionLamp = uilamp(app.ArduinoConnectionPanel);
+            app.ConnectionLamp.Position = [163 14 20 20];
+            app.ConnectionLamp.Color = [0 0 0];
+
+            % Create TextArea
+            app.TextArea = uitextarea(app.LeftPanel);
+            app.TextArea.Position = [5 427 210 44];
+            app.TextArea.Value = {'Hello!'};
+
+            % Create LoadCellGroup
+            app.LoadCellGroup = uitabgroup(app.LeftPanel);
+            app.LoadCellGroup.Position = [1 70 220 232];
+
+            % Create FrontLeftTab
+            app.FrontLeftTab = uitab(app.LoadCellGroup);
+            app.FrontLeftTab.Title = 'Front Left';
+
+            % Create DataOutPinEditFieldLabel
+            app.DataOutPinEditFieldLabel = uilabel(app.FrontLeftTab);
+            app.DataOutPinEditFieldLabel.HorizontalAlignment = 'right';
+            app.DataOutPinEditFieldLabel.Position = [25 177 74 22];
+            app.DataOutPinEditFieldLabel.Text = 'Data Out Pin';
+
+            % Create FLDataOutPinEditField
+            app.FLDataOutPinEditField = uieditfield(app.FrontLeftTab, 'text');
+            app.FLDataOutPinEditField.Position = [114 177 100 22];
+            app.FLDataOutPinEditField.Value = 'D2';
+
+            % Create ClockSCKPinEditFieldLabel
+            app.ClockSCKPinEditFieldLabel = uilabel(app.FrontLeftTab);
+            app.ClockSCKPinEditFieldLabel.HorizontalAlignment = 'right';
+            app.ClockSCKPinEditFieldLabel.Position = [7 148 92 22];
+            app.ClockSCKPinEditFieldLabel.Text = 'Clock (SCK) Pin';
+
+            % Create FLClockSCKPinEditField
+            app.FLClockSCKPinEditField = uieditfield(app.FrontLeftTab, 'text');
+            app.FLClockSCKPinEditField.Position = [114 148 100 22];
+            app.FLClockSCKPinEditField.Value = 'D3';
+
+            % Create TareValueEditFieldLabel
+            app.TareValueEditFieldLabel = uilabel(app.FrontLeftTab);
+            app.TareValueEditFieldLabel.HorizontalAlignment = 'right';
+            app.TareValueEditFieldLabel.Position = [37 119 62 22];
+            app.TareValueEditFieldLabel.Text = 'Tare Value';
+
+            % Create FLTareValueEditField
+            app.FLTareValueEditField = uieditfield(app.FrontLeftTab, 'numeric');
+            app.FLTareValueEditField.ValueDisplayFormat = '%.0f';
+            app.FLTareValueEditField.Position = [114 119 100 22];
+            app.FLTareValueEditField.Value = 8431740.8;
+
+            % Create ScaleFactorEditFieldLabel
+            app.ScaleFactorEditFieldLabel = uilabel(app.FrontLeftTab);
+            app.ScaleFactorEditFieldLabel.HorizontalAlignment = 'right';
+            app.ScaleFactorEditFieldLabel.Position = [26 90 73 22];
+            app.ScaleFactorEditFieldLabel.Text = 'Scale Factor';
+
+            % Create FLScaleFactorEditField
+            app.FLScaleFactorEditField = uieditfield(app.FrontLeftTab, 'numeric');
+            app.FLScaleFactorEditField.ValueDisplayFormat = '%.2f';
+            app.FLScaleFactorEditField.Position = [114 90 100 22];
+            app.FLScaleFactorEditField.Value = 46.3390447803311;
+
+            % Create MaxLoadgEditFieldLabel
+            app.MaxLoadgEditFieldLabel = uilabel(app.FrontLeftTab);
+            app.MaxLoadgEditFieldLabel.HorizontalAlignment = 'right';
+            app.MaxLoadgEditFieldLabel.Position = [23 59 76 22];
+            app.MaxLoadgEditFieldLabel.Text = 'Max Load (g)';
+
+            % Create FLMaxLoadgEditField
+            app.FLMaxLoadgEditField = uieditfield(app.FrontLeftTab, 'numeric');
+            app.FLMaxLoadgEditField.ValueDisplayFormat = '%.0f';
+            app.FLMaxLoadgEditField.Position = [114 61 100 22];
+            app.FLMaxLoadgEditField.Value = 100000;
+
+            % Create FLTareButton
+            app.FLTareButton = uibutton(app.FrontLeftTab, 'push');
+            app.FLTareButton.ButtonPushedFcn = createCallbackFcn(app, @FLTareButtonPushed, true);
+            app.FLTareButton.Position = [7 32 100 22];
+            app.FLTareButton.Text = {'Tare'; ''};
+
+            % Create FLCalibrateButton
+            app.FLCalibrateButton = uibutton(app.FrontLeftTab, 'push');
+            app.FLCalibrateButton.ButtonPushedFcn = createCallbackFcn(app, @FLCalibrateButtonPushed, true);
+            app.FLCalibrateButton.Position = [114 32 100 22];
+            app.FLCalibrateButton.Text = {'Calibrate'; ''};
+
+            % Create KnownWeightgLabel
+            app.KnownWeightgLabel = uilabel(app.FrontLeftTab);
+            app.KnownWeightgLabel.HorizontalAlignment = 'right';
+            app.KnownWeightgLabel.Position = [4 4 101 22];
+            app.KnownWeightgLabel.Text = 'Known Weight (g)';
+
+            % Create FLKnownWeightgEditField
+            app.FLKnownWeightgEditField = uieditfield(app.FrontLeftTab, 'numeric');
+            app.FLKnownWeightgEditField.ValueDisplayFormat = '%.2f';
+            app.FLKnownWeightgEditField.Position = [115 5 100 22];
+            app.FLKnownWeightgEditField.Value = 284;
+
+            % Create FrontRightTab
+            app.FrontRightTab = uitab(app.LoadCellGroup);
+            app.FrontRightTab.Title = 'Front Right';
+
+            % Create DataOutPinEditFieldLabel_2
+            app.DataOutPinEditFieldLabel_2 = uilabel(app.FrontRightTab);
+            app.DataOutPinEditFieldLabel_2.HorizontalAlignment = 'right';
+            app.DataOutPinEditFieldLabel_2.Position = [25 177 74 22];
+            app.DataOutPinEditFieldLabel_2.Text = 'Data Out Pin';
+
+            % Create FRDataOutPinEditField
+            app.FRDataOutPinEditField = uieditfield(app.FrontRightTab, 'text');
+            app.FRDataOutPinEditField.Position = [114 177 100 22];
+            app.FRDataOutPinEditField.Value = 'D4';
+
+            % Create ClockSCKPinEditFieldLabel_2
+            app.ClockSCKPinEditFieldLabel_2 = uilabel(app.FrontRightTab);
+            app.ClockSCKPinEditFieldLabel_2.HorizontalAlignment = 'right';
+            app.ClockSCKPinEditFieldLabel_2.Position = [7 148 92 22];
+            app.ClockSCKPinEditFieldLabel_2.Text = 'Clock (SCK) Pin';
+
+            % Create FRClockSCKPinEditField
+            app.FRClockSCKPinEditField = uieditfield(app.FrontRightTab, 'text');
+            app.FRClockSCKPinEditField.Position = [114 148 100 22];
+            app.FRClockSCKPinEditField.Value = 'D5';
+
+            % Create TareValueEditFieldLabel_2
+            app.TareValueEditFieldLabel_2 = uilabel(app.FrontRightTab);
+            app.TareValueEditFieldLabel_2.HorizontalAlignment = 'right';
+            app.TareValueEditFieldLabel_2.Position = [37 119 62 22];
+            app.TareValueEditFieldLabel_2.Text = 'Tare Value';
+
+            % Create FRTareValueEditField
+            app.FRTareValueEditField = uieditfield(app.FrontRightTab, 'numeric');
+            app.FRTareValueEditField.ValueDisplayFormat = '%.0f';
+            app.FRTareValueEditField.Position = [114 119 100 22];
+            app.FRTareValueEditField.Value = 8385229.7;
+
+            % Create ScaleFactorEditFieldLabel_2
+            app.ScaleFactorEditFieldLabel_2 = uilabel(app.FrontRightTab);
+            app.ScaleFactorEditFieldLabel_2.HorizontalAlignment = 'right';
+            app.ScaleFactorEditFieldLabel_2.Position = [26 90 73 22];
+            app.ScaleFactorEditFieldLabel_2.Text = 'Scale Factor';
+
+            % Create FRScaleFactorEditField
+            app.FRScaleFactorEditField = uieditfield(app.FrontRightTab, 'numeric');
+            app.FRScaleFactorEditField.ValueDisplayFormat = '%.2f';
+            app.FRScaleFactorEditField.Position = [114 90 100 22];
+            app.FRScaleFactorEditField.Value = 48.7322086809292;
+
+            % Create MaxLoadgEditFieldLabel_2
+            app.MaxLoadgEditFieldLabel_2 = uilabel(app.FrontRightTab);
+            app.MaxLoadgEditFieldLabel_2.HorizontalAlignment = 'right';
+            app.MaxLoadgEditFieldLabel_2.Position = [23 59 76 22];
+            app.MaxLoadgEditFieldLabel_2.Text = 'Max Load (g)';
+
+            % Create FRMaxLoadgEditField
+            app.FRMaxLoadgEditField = uieditfield(app.FrontRightTab, 'numeric');
+            app.FRMaxLoadgEditField.ValueDisplayFormat = '%.0f';
+            app.FRMaxLoadgEditField.Position = [114 61 100 22];
+            app.FRMaxLoadgEditField.Value = 100000;
+
+            % Create FRTareButton
+            app.FRTareButton = uibutton(app.FrontRightTab, 'push');
+            app.FRTareButton.ButtonPushedFcn = createCallbackFcn(app, @FRTareButtonPushed, true);
+            app.FRTareButton.Position = [7 32 100 22];
+            app.FRTareButton.Text = {'Tare'; ''};
+
+            % Create FRCalibrateButton
+            app.FRCalibrateButton = uibutton(app.FrontRightTab, 'push');
+            app.FRCalibrateButton.ButtonPushedFcn = createCallbackFcn(app, @FRCalibrateButtonPushed, true);
+            app.FRCalibrateButton.Position = [114 32 100 22];
+            app.FRCalibrateButton.Text = {'Calibrate'; ''};
+
+            % Create KnownWeightgLabel_2
+            app.KnownWeightgLabel_2 = uilabel(app.FrontRightTab);
+            app.KnownWeightgLabel_2.HorizontalAlignment = 'right';
+            app.KnownWeightgLabel_2.Position = [-2 2 101 22];
+            app.KnownWeightgLabel_2.Text = 'Known Weight (g)';
+
+            % Create FRKnownWeightgEditField
+            app.FRKnownWeightgEditField = uieditfield(app.FrontRightTab, 'numeric');
+            app.FRKnownWeightgEditField.ValueDisplayFormat = '%.2f';
+            app.FRKnownWeightgEditField.Position = [114 2 100 22];
+            app.FRKnownWeightgEditField.Value = 2267.96;
+
+            % Create RearLeftTab
+            app.RearLeftTab = uitab(app.LoadCellGroup);
+            app.RearLeftTab.Title = 'Rear Left';
+
+            % Create DataOutPinEditFieldLabel_3
+            app.DataOutPinEditFieldLabel_3 = uilabel(app.RearLeftTab);
+            app.DataOutPinEditFieldLabel_3.HorizontalAlignment = 'right';
+            app.DataOutPinEditFieldLabel_3.Position = [25 177 74 22];
+            app.DataOutPinEditFieldLabel_3.Text = 'Data Out Pin';
+
+            % Create RLDataOutPinEditField
+            app.RLDataOutPinEditField = uieditfield(app.RearLeftTab, 'text');
+            app.RLDataOutPinEditField.Position = [114 177 100 22];
+            app.RLDataOutPinEditField.Value = 'D7';
+
+            % Create ClockSCKPinEditFieldLabel_3
+            app.ClockSCKPinEditFieldLabel_3 = uilabel(app.RearLeftTab);
+            app.ClockSCKPinEditFieldLabel_3.HorizontalAlignment = 'right';
+            app.ClockSCKPinEditFieldLabel_3.Position = [7 148 92 22];
+            app.ClockSCKPinEditFieldLabel_3.Text = 'Clock (SCK) Pin';
+
+            % Create RLClockSCKPinEditField
+            app.RLClockSCKPinEditField = uieditfield(app.RearLeftTab, 'text');
+            app.RLClockSCKPinEditField.Position = [114 148 100 22];
+            app.RLClockSCKPinEditField.Value = 'D6';
+
+            % Create TareValueEditFieldLabel_3
+            app.TareValueEditFieldLabel_3 = uilabel(app.RearLeftTab);
+            app.TareValueEditFieldLabel_3.HorizontalAlignment = 'right';
+            app.TareValueEditFieldLabel_3.Position = [37 119 62 22];
+            app.TareValueEditFieldLabel_3.Text = 'Tare Value';
+
+            % Create RLTareValueEditField
+            app.RLTareValueEditField = uieditfield(app.RearLeftTab, 'numeric');
+            app.RLTareValueEditField.ValueDisplayFormat = '%.0f';
+            app.RLTareValueEditField.Position = [114 119 100 22];
+            app.RLTareValueEditField.Value = 8332506.7;
+
+            % Create ScaleFactorEditFieldLabel_3
+            app.ScaleFactorEditFieldLabel_3 = uilabel(app.RearLeftTab);
+            app.ScaleFactorEditFieldLabel_3.HorizontalAlignment = 'right';
+            app.ScaleFactorEditFieldLabel_3.Position = [26 90 73 22];
+            app.ScaleFactorEditFieldLabel_3.Text = 'Scale Factor';
+
+            % Create RLScaleFactorEditField
+            app.RLScaleFactorEditField = uieditfield(app.RearLeftTab, 'numeric');
+            app.RLScaleFactorEditField.ValueDisplayFormat = '%.2f';
+            app.RLScaleFactorEditField.Position = [114 90 100 22];
+            app.RLScaleFactorEditField.Value = 45.3827826086954;
+
+            % Create MaxLoadgEditFieldLabel_3
+            app.MaxLoadgEditFieldLabel_3 = uilabel(app.RearLeftTab);
+            app.MaxLoadgEditFieldLabel_3.HorizontalAlignment = 'right';
+            app.MaxLoadgEditFieldLabel_3.Position = [23 59 76 22];
+            app.MaxLoadgEditFieldLabel_3.Text = 'Max Load (g)';
+
+            % Create RLMaxLoadgEditField
+            app.RLMaxLoadgEditField = uieditfield(app.RearLeftTab, 'numeric');
+            app.RLMaxLoadgEditField.ValueDisplayFormat = '%.0f';
+            app.RLMaxLoadgEditField.Position = [114 61 100 22];
+            app.RLMaxLoadgEditField.Value = 100000;
+
+            % Create RLTareButton
+            app.RLTareButton = uibutton(app.RearLeftTab, 'push');
+            app.RLTareButton.ButtonPushedFcn = createCallbackFcn(app, @RLTareButtonPushed, true);
+            app.RLTareButton.Position = [7 32 100 22];
+            app.RLTareButton.Text = {'Tare'; ''};
+
+            % Create RLCalibrateButton
+            app.RLCalibrateButton = uibutton(app.RearLeftTab, 'push');
+            app.RLCalibrateButton.ButtonPushedFcn = createCallbackFcn(app, @RLCalibrateButtonPushed, true);
+            app.RLCalibrateButton.Position = [114 32 100 22];
+            app.RLCalibrateButton.Text = {'Calibrate'; ''};
+
+            % Create KnownWeightgLabel_3
+            app.KnownWeightgLabel_3 = uilabel(app.RearLeftTab);
+            app.KnownWeightgLabel_3.HorizontalAlignment = 'right';
+            app.KnownWeightgLabel_3.Position = [-2 2 101 22];
+            app.KnownWeightgLabel_3.Text = 'Known Weight (g)';
+
+            % Create RLKnownWeightgEditField
+            app.RLKnownWeightgEditField = uieditfield(app.RearLeftTab, 'numeric');
+            app.RLKnownWeightgEditField.ValueDisplayFormat = '%.2f';
+            app.RLKnownWeightgEditField.Position = [114 2 100 22];
+            app.RLKnownWeightgEditField.Value = 284;
+
+            % Create RearRightTab
+            app.RearRightTab = uitab(app.LoadCellGroup);
+            app.RearRightTab.Title = 'Rear Right';
+
+            % Create DataOutPinEditFieldLabel_4
+            app.DataOutPinEditFieldLabel_4 = uilabel(app.RearRightTab);
+            app.DataOutPinEditFieldLabel_4.HorizontalAlignment = 'right';
+            app.DataOutPinEditFieldLabel_4.Position = [25 177 74 22];
+            app.DataOutPinEditFieldLabel_4.Text = 'Data Out Pin';
+
+            % Create RRDataOutPinEditField
+            app.RRDataOutPinEditField = uieditfield(app.RearRightTab, 'text');
+            app.RRDataOutPinEditField.Position = [114 177 100 22];
+            app.RRDataOutPinEditField.Value = 'D8';
+
+            % Create ClockSCKPinEditFieldLabel_4
+            app.ClockSCKPinEditFieldLabel_4 = uilabel(app.RearRightTab);
+            app.ClockSCKPinEditFieldLabel_4.HorizontalAlignment = 'right';
+            app.ClockSCKPinEditFieldLabel_4.Position = [7 148 92 22];
+            app.ClockSCKPinEditFieldLabel_4.Text = 'Clock (SCK) Pin';
+
+            % Create RRClockSCKPinEditField
+            app.RRClockSCKPinEditField = uieditfield(app.RearRightTab, 'text');
+            app.RRClockSCKPinEditField.Position = [114 148 100 22];
+            app.RRClockSCKPinEditField.Value = 'D9';
+
+            % Create TareValueEditFieldLabel_4
+            app.TareValueEditFieldLabel_4 = uilabel(app.RearRightTab);
+            app.TareValueEditFieldLabel_4.HorizontalAlignment = 'right';
+            app.TareValueEditFieldLabel_4.Position = [37 119 62 22];
+            app.TareValueEditFieldLabel_4.Text = 'Tare Value';
+
+            % Create RRTareValueEditField
+            app.RRTareValueEditField = uieditfield(app.RearRightTab, 'numeric');
+            app.RRTareValueEditField.ValueDisplayFormat = '%.0f';
+            app.RRTareValueEditField.Position = [114 119 100 22];
+            app.RRTareValueEditField.Value = 8332506.7;
+
+            % Create ScaleFactorEditFieldLabel_4
+            app.ScaleFactorEditFieldLabel_4 = uilabel(app.RearRightTab);
+            app.ScaleFactorEditFieldLabel_4.HorizontalAlignment = 'right';
+            app.ScaleFactorEditFieldLabel_4.Position = [26 90 73 22];
+            app.ScaleFactorEditFieldLabel_4.Text = 'Scale Factor';
+
+            % Create RRScaleFactorEditField
+            app.RRScaleFactorEditField = uieditfield(app.RearRightTab, 'numeric');
+            app.RRScaleFactorEditField.ValueDisplayFormat = '%.2f';
+            app.RRScaleFactorEditField.Position = [114 90 100 22];
+            app.RRScaleFactorEditField.Value = 45.3827826086954;
+
+            % Create MaxLoadgEditFieldLabel_4
+            app.MaxLoadgEditFieldLabel_4 = uilabel(app.RearRightTab);
+            app.MaxLoadgEditFieldLabel_4.HorizontalAlignment = 'right';
+            app.MaxLoadgEditFieldLabel_4.Position = [23 59 76 22];
+            app.MaxLoadgEditFieldLabel_4.Text = 'Max Load (g)';
+
+            % Create RRMaxLoadgEditField
+            app.RRMaxLoadgEditField = uieditfield(app.RearRightTab, 'numeric');
+            app.RRMaxLoadgEditField.ValueDisplayFormat = '%.0f';
+            app.RRMaxLoadgEditField.Position = [114 61 100 22];
+            app.RRMaxLoadgEditField.Value = 100000;
+
+            % Create RRTareButton
+            app.RRTareButton = uibutton(app.RearRightTab, 'push');
+            app.RRTareButton.ButtonPushedFcn = createCallbackFcn(app, @RRTareButtonPushed, true);
+            app.RRTareButton.Position = [7 32 100 22];
+            app.RRTareButton.Text = {'Tare'; ''};
+
+            % Create RRCalibrateButton
+            app.RRCalibrateButton = uibutton(app.RearRightTab, 'push');
+            app.RRCalibrateButton.ButtonPushedFcn = createCallbackFcn(app, @RRCalibrateButtonPushed, true);
+            app.RRCalibrateButton.Position = [114 32 100 22];
+            app.RRCalibrateButton.Text = {'Calibrate'; ''};
+
+            % Create KnownWeightgLabel_4
+            app.KnownWeightgLabel_4 = uilabel(app.RearRightTab);
+            app.KnownWeightgLabel_4.HorizontalAlignment = 'right';
+            app.KnownWeightgLabel_4.Position = [-2 2 101 22];
+            app.KnownWeightgLabel_4.Text = 'Known Weight (g)';
+
+            % Create RRKnownWeightgEditField
+            app.RRKnownWeightgEditField = uieditfield(app.RearRightTab, 'numeric');
+            app.RRKnownWeightgEditField.ValueDisplayFormat = '%.2f';
+            app.RRKnownWeightgEditField.Position = [114 2 100 22];
+            app.RRKnownWeightgEditField.Value = 284;
+
+            % Create Panel
+            app.Panel = uipanel(app.LeftPanel);
+            app.Panel.AutoResizeChildren = 'off';
+            app.Panel.Position = [0 0 220 70];
+
+            % Create FLReceiveDataButton
+            app.FLReceiveDataButton = uibutton(app.Panel, 'push');
+            app.FLReceiveDataButton.ButtonPushedFcn = createCallbackFcn(app, @FLReceiveDataButtonPushed, true);
+            app.FLReceiveDataButton.FontSize = 10;
+            app.FLReceiveDataButton.Position = [5 37 74 22];
+            app.FLReceiveDataButton.Text = 'Receive Data';
+
+            % Create FLDataLamp
+            app.FLDataLamp = uilamp(app.Panel);
+            app.FLDataLamp.Position = [89 20 30 30];
+            app.FLDataLamp.Color = [0 0 0];
+
+            % Create FLStopDataButton
+            app.FLStopDataButton = uibutton(app.Panel, 'push');
+            app.FLStopDataButton.ButtonPushedFcn = createCallbackFcn(app, @FLStopDataButtonPushed, true);
+            app.FLStopDataButton.FontSize = 10;
+            app.FLStopDataButton.Position = [5 8 74 22];
+            app.FLStopDataButton.Text = {'Stop Data'; ''};
+
+            % Create PauseReadingsButton
+            app.PauseReadingsButton = uibutton(app.Panel, 'push');
+            app.PauseReadingsButton.ButtonPushedFcn = createCallbackFcn(app, @PauseReadingsButtonPushed, true);
+            app.PauseReadingsButton.FontSize = 10;
+            app.PauseReadingsButton.Position = [131 37 85 22];
+            app.PauseReadingsButton.Text = 'Pause Readings';
+
+            % Create ResumeReadingsButton
+            app.ResumeReadingsButton = uibutton(app.Panel, 'push');
+            app.ResumeReadingsButton.ButtonPushedFcn = createCallbackFcn(app, @ResumeReadingsButtonPushed, true);
+            app.ResumeReadingsButton.FontSize = 10;
+            app.ResumeReadingsButton.Position = [131 8 85 22];
+            app.ResumeReadingsButton.Text = 'Resume Readings';
+
+            % Create CenterPanel
+            app.CenterPanel = uipanel(app.GridLayout);
+            app.CenterPanel.Layout.Row = 1;
+            app.CenterPanel.Layout.Column = 2;
+
+            % Create FLLoadCell
+            app.FLLoadCell = uieditfield(app.CenterPanel, 'numeric');
+            app.FLLoadCell.ValueDisplayFormat = '%.2f';
+            app.FLLoadCell.Position = [147 168 45 22];
+
+            % Create RetrieveRawValueButton
+            app.RetrieveRawValueButton = uibutton(app.CenterPanel, 'push');
+            app.RetrieveRawValueButton.ButtonPushedFcn = createCallbackFcn(app, @RetrieveRawValueButtonPushed, true);
+            app.RetrieveRawValueButton.Position = [12 168 121 22];
+            app.RetrieveRawValueButton.Text = {'Retrieve Raw Value'; ''; ''};
+
+            % Create UIAxes
+            app.UIAxes = uiaxes(app.CenterPanel);
+            title(app.UIAxes, {'Live Data Acquisition'; ''})
+            xlabel(app.UIAxes, 'Time (s)')
+            ylabel(app.UIAxes, 'Load (g)')
+            app.UIAxes.XGrid = 'on';
+            app.UIAxes.YGrid = 'on';
+            app.UIAxes.Position = [1 215 401 264];
+
+            % Create FLLabel
+            app.FLLabel = uilabel(app.CenterPanel);
+            app.FLLabel.HorizontalAlignment = 'center';
+            app.FLLabel.Position = [158 189 25 22];
+            app.FLLabel.Text = 'FL';
+
+            % Create LoadCellLabel
+            app.LoadCellLabel = uilabel(app.CenterPanel);
+            app.LoadCellLabel.HorizontalAlignment = 'center';
+            app.LoadCellLabel.Position = [42 189 60 22];
+            app.LoadCellLabel.Text = 'Load Cell:';
+
+            % Create UITable
+            app.UITable = uitable(app.CenterPanel);
+            app.UITable.ColumnName = {'Time [s]'; 'F-R Deformation Angle [°]'; 'Torque [ft-lbf]'; 'Torsional Rigidity [ft-lbf/°]'};
+            app.UITable.RowName = {};
+            app.UITable.ColumnEditable = true;
+            app.UITable.Position = [1 2 410 150];
+
+            % Create FRLoadCell
+            app.FRLoadCell = uieditfield(app.CenterPanel, 'numeric');
+            app.FRLoadCell.ValueDisplayFormat = '%.2f';
+            app.FRLoadCell.Position = [215 168 45 22];
+
+            % Create FRLabel
+            app.FRLabel = uilabel(app.CenterPanel);
+            app.FRLabel.HorizontalAlignment = 'center';
+            app.FRLabel.Position = [226 189 25 22];
+            app.FRLabel.Text = 'FR';
+
+            % Create RLLoadCell
+            app.RLLoadCell = uieditfield(app.CenterPanel, 'numeric');
+            app.RLLoadCell.ValueDisplayFormat = '%.2f';
+            app.RLLoadCell.Position = [279 168 45 22];
+
+            % Create RLLabel
+            app.RLLabel = uilabel(app.CenterPanel);
+            app.RLLabel.HorizontalAlignment = 'center';
+            app.RLLabel.Position = [290 189 25 22];
+            app.RLLabel.Text = 'RL';
+
+            % Create RRLoadCell
+            app.RRLoadCell = uieditfield(app.CenterPanel, 'numeric');
+            app.RRLoadCell.ValueDisplayFormat = '%.2f';
+            app.RRLoadCell.Position = [347 168 45 22];
+
+            % Create RRLabel
+            app.RRLabel = uilabel(app.CenterPanel);
+            app.RRLabel.HorizontalAlignment = 'center';
+            app.RRLabel.Position = [358 189 25 22];
+            app.RRLabel.Text = 'RR';
+
+            % Create RightPanel
+            app.RightPanel = uipanel(app.GridLayout);
+            app.RightPanel.Layout.Row = 1;
+            app.RightPanel.Layout.Column = 3;
+
+            % Create TorsionalRigidityCalculationPanel
+            app.TorsionalRigidityCalculationPanel = uipanel(app.RightPanel);
+            app.TorsionalRigidityCalculationPanel.Title = 'Torsional Rigidity Calculation';
+            app.TorsionalRigidityCalculationPanel.Position = [0 368 229 111];
+
+            % Create GetTorsionalRigidityButton
+            app.GetTorsionalRigidityButton = uibutton(app.TorsionalRigidityCalculationPanel, 'push');
+            app.GetTorsionalRigidityButton.ButtonPushedFcn = createCallbackFcn(app, @GetTorsionalRigidityButtonPushed, true);
+            app.GetTorsionalRigidityButton.FontSize = 10;
+            app.GetTorsionalRigidityButton.Position = [5 35 110 22];
+            app.GetTorsionalRigidityButton.Text = 'Get Torsional Rigidity';
+
+            % Create TorsionalRigidityOutput
+            app.TorsionalRigidityOutput = uieditfield(app.TorsionalRigidityCalculationPanel, 'numeric');
+            app.TorsionalRigidityOutput.ValueDisplayFormat = '%.2f';
+            app.TorsionalRigidityOutput.Position = [127 35 97 22];
+
+            % Create DeformationAngleLabel
+            app.DeformationAngleLabel = uilabel(app.TorsionalRigidityCalculationPanel);
+            app.DeformationAngleLabel.HorizontalAlignment = 'right';
+            app.DeformationAngleLabel.FontSize = 10;
+            app.DeformationAngleLabel.Position = [5 8 102 22];
+            app.DeformationAngleLabel.Text = {'Deformation Angle (°)'; ''};
+
+            % Create DeformationAngle1EditField
+            app.DeformationAngle1EditField = uieditfield(app.TorsionalRigidityCalculationPanel, 'numeric');
+            app.DeformationAngle1EditField.ValueDisplayFormat = '%.2f';
+            app.DeformationAngle1EditField.Position = [130 8 36 22];
+
+            % Create Button
+            app.Button = uibutton(app.TorsionalRigidityCalculationPanel, 'state');
+            app.Button.ValueChangedFcn = createCallbackFcn(app, @ButtonValueChanged, true);
+            app.Button.Text = '8';
+            app.Button.Position = [184 64 40 22];
+
+            % Create Button_2
+            app.Button_2 = uibutton(app.TorsionalRigidityCalculationPanel, 'state');
+            app.Button_2.ValueChangedFcn = createCallbackFcn(app, @Button_2ValueChanged, true);
+            app.Button_2.Text = '6';
+            app.Button_2.Position = [138 64 40 22];
+
+            % Create Button_3
+            app.Button_3 = uibutton(app.TorsionalRigidityCalculationPanel, 'state');
+            app.Button_3.ValueChangedFcn = createCallbackFcn(app, @Button_3ValueChanged, true);
+            app.Button_3.Text = '4';
+            app.Button_3.Position = [94 64 40 22];
+            app.Button_3.Value = true;
+
+            % Create DialIndicatorsLabel
+            app.DialIndicatorsLabel = uilabel(app.TorsionalRigidityCalculationPanel);
+            app.DialIndicatorsLabel.FontSize = 11;
+            app.DialIndicatorsLabel.Position = [4 64 87 22];
+            app.DialIndicatorsLabel.Text = '# Dial Indicators:';
+
+            % Create DeformationAngle1EditField_2
+            app.DeformationAngle1EditField_2 = uieditfield(app.TorsionalRigidityCalculationPanel, 'numeric');
+            app.DeformationAngle1EditField_2.ValueDisplayFormat = '%.2f';
+            app.DeformationAngle1EditField_2.Position = [188 8 36 22];
+
+            % Create FLabel
+            app.FLabel = uilabel(app.TorsionalRigidityCalculationPanel);
+            app.FLabel.HorizontalAlignment = 'center';
+            app.FLabel.Position = [109 8 25 22];
+            app.FLabel.Text = 'F:';
+
+            % Create RLabel
+            app.RLabel = uilabel(app.TorsionalRigidityCalculationPanel);
+            app.RLabel.HorizontalAlignment = 'center';
+            app.RLabel.Position = [165 8 25 22];
+            app.RLabel.Text = 'R:';
+
+            % Create SaveLamp
+            app.SaveLamp = uilamp(app.RightPanel);
+            app.SaveLamp.Position = [161 62 20 20];
+            app.SaveLamp.Color = [0 0 0];
+
+            % Create SaveAllValuestoExcelSheetsLabel
+            app.SaveAllValuestoExcelSheetsLabel = uilabel(app.RightPanel);
+            app.SaveAllValuestoExcelSheetsLabel.HorizontalAlignment = 'center';
+            app.SaveAllValuestoExcelSheetsLabel.Position = [23.5 34 182 22];
+            app.SaveAllValuestoExcelSheetsLabel.Text = 'Save All Values to Excel Sheets?';
+
+            % Create SaveTorsionalRigidity
+            app.SaveTorsionalRigidity = uiswitch(app.RightPanel, 'slider');
+            app.SaveTorsionalRigidity.Items = {'No', 'Yes'};
+            app.SaveTorsionalRigidity.ValueChangedFcn = createCallbackFcn(app, @SaveTorsionalRigidityValueChanged, true);
+            app.SaveTorsionalRigidity.Position = [52 62 45 20];
+            app.SaveTorsionalRigidity.Value = 'No';
+
+            % Create LoadCellValuesandTorsionalRigidityValueswithTimeLabel
+            app.LoadCellValuesandTorsionalRigidityValueswithTimeLabel = uilabel(app.RightPanel);
+            app.LoadCellValuesandTorsionalRigidityValueswithTimeLabel.FontSize = 8;
+            app.LoadCellValuesandTorsionalRigidityValueswithTimeLabel.Position = [11 13 212 22];
+            app.LoadCellValuesandTorsionalRigidityValueswithTimeLabel.Text = '(Load Cell Values and Torsional Rigidity Values with Time)';
+
+            % Create DialIndicatorSettingsPanel
+            app.DialIndicatorSettingsPanel = uipanel(app.RightPanel);
+            app.DialIndicatorSettingsPanel.AutoResizeChildren = 'off';
+            app.DialIndicatorSettingsPanel.Title = 'Dial Indicator Settings';
+            app.DialIndicatorSettingsPanel.Position = [0 93 229 278];
+
+            % Create TabGroup
+            app.TabGroup = uitabgroup(app.DialIndicatorSettingsPanel);
+            app.TabGroup.AutoResizeChildren = 'off';
+            app.TabGroup.Position = [0 0 229 258];
+
+            % Create Tab
+            app.Tab = uitab(app.TabGroup);
+            app.Tab.AutoResizeChildren = 'off';
+            app.Tab.Title = '4';
+
+            % Create DialIndicatorDisplacementsInLabel
+            app.DialIndicatorDisplacementsInLabel = uilabel(app.Tab);
+            app.DialIndicatorDisplacementsInLabel.Position = [23 211 178 22];
+            app.DialIndicatorDisplacementsInLabel.Text = 'Dial Indicator Displacements[In.]';
+
+            % Create FrontLeftLabel
+            app.FrontLeftLabel = uilabel(app.Tab);
+            app.FrontLeftLabel.HorizontalAlignment = 'right';
+            app.FrontLeftLabel.Position = [0 185 60 22];
+            app.FrontLeftLabel.Text = 'Front Left:';
+
+            % Create FLDialIndicator
+            app.FLDialIndicator = uieditfield(app.Tab, 'numeric');
+            app.FLDialIndicator.Position = [66 185 40 22];
+
+            % Create FrontRightLabel
+            app.FrontRightLabel = uilabel(app.Tab);
+            app.FrontRightLabel.HorizontalAlignment = 'right';
+            app.FrontRightLabel.Position = [109 186 68 22];
+            app.FrontRightLabel.Text = 'Front Right:';
+
+            % Create FRDialIndicator
+            app.FRDialIndicator = uieditfield(app.Tab, 'numeric');
+            app.FRDialIndicator.Position = [181 185 40 22];
+            app.FRDialIndicator.Value = 0.1;
+
+            % Create RearLeftLabel
+            app.RearLeftLabel = uilabel(app.Tab);
+            app.RearLeftLabel.HorizontalAlignment = 'right';
+            app.RearLeftLabel.Position = [1 154 58 22];
+            app.RearLeftLabel.Text = 'Rear Left:';
+
+            % Create RLDialIndicator
+            app.RLDialIndicator = uieditfield(app.Tab, 'numeric');
+            app.RLDialIndicator.Position = [65 154 40 22];
+
+            % Create RearRightLabel
+            app.RearRightLabel = uilabel(app.Tab);
+            app.RearRightLabel.HorizontalAlignment = 'right';
+            app.RearRightLabel.Position = [109 154 66 22];
+            app.RearRightLabel.Text = 'Rear Right:';
+
+            % Create RRDialIndicator
+            app.RRDialIndicator = uieditfield(app.Tab, 'numeric');
+            app.RRDialIndicator.Position = [180 154 40 22];
+            app.RRDialIndicator.Value = 0.3;
+
+            % Create ResetDisplacedValuesButton
+            app.ResetDisplacedValuesButton = uibutton(app.Tab, 'push');
+            app.ResetDisplacedValuesButton.ButtonPushedFcn = createCallbackFcn(app, @ResetDisplacedValuesButtonPushed, true);
+            app.ResetDisplacedValuesButton.Position = [51 122 142 22];
+            app.ResetDisplacedValuesButton.Text = 'Reset Displaced Values';
+
+            % Create DistanceBetweenDialIndicatorsinEditFieldLabel
+            app.DistanceBetweenDialIndicatorsinEditFieldLabel = uilabel(app.Tab);
+            app.DistanceBetweenDialIndicatorsinEditFieldLabel.HorizontalAlignment = 'right';
+            app.DistanceBetweenDialIndicatorsinEditFieldLabel.Position = [8 100 205 22];
+            app.DistanceBetweenDialIndicatorsinEditFieldLabel.Text = 'Distance Between Dial Indicators [in.]';
+
+            % Create FrontDialIndicatorDistance
+            app.FrontDialIndicatorDistance = uieditfield(app.Tab, 'numeric');
+            app.FrontDialIndicatorDistance.LowerLimitInclusive = 'off';
+            app.FrontDialIndicatorDistance.HorizontalAlignment = 'center';
+            app.FrontDialIndicatorDistance.Position = [66 71 40 22];
+            app.FrontDialIndicatorDistance.Value = 11.675;
+
+            % Create FrontLabel_2
+            app.FrontLabel_2 = uilabel(app.Tab);
+            app.FrontLabel_2.HorizontalAlignment = 'center';
+            app.FrontLabel_2.Position = [23 71 37 22];
+            app.FrontLabel_2.Text = 'Front:';
+
+            % Create RearLabel
+            app.RearLabel = uilabel(app.Tab);
+            app.RearLabel.HorizontalAlignment = 'center';
+            app.RearLabel.Position = [114 71 35 22];
+            app.RearLabel.Text = 'Rear:';
+
+            % Create RearDialIndicatorDistance
+            app.RearDialIndicatorDistance = uieditfield(app.Tab, 'numeric');
+            app.RearDialIndicatorDistance.HorizontalAlignment = 'center';
+            app.RearDialIndicatorDistance.Position = [156 71 40 22];
+            app.RearDialIndicatorDistance.Value = 13;
+
+            % Create DistanceBetweenHubsinLabel
+            app.DistanceBetweenHubsinLabel = uilabel(app.Tab);
+            app.DistanceBetweenHubsinLabel.HorizontalAlignment = 'center';
+            app.DistanceBetweenHubsinLabel.Position = [8 41 218 22];
+            app.DistanceBetweenHubsinLabel.Text = 'Distance Between Hubs [in.]';
+
+            % Create FrontHubDistance
+            app.FrontHubDistance = uieditfield(app.Tab, 'numeric');
+            app.FrontHubDistance.HorizontalAlignment = 'center';
+            app.FrontHubDistance.Position = [66 16 40 22];
+            app.FrontHubDistance.Value = 53.375;
+
+            % Create FrontLabel_3
+            app.FrontLabel_3 = uilabel(app.Tab);
+            app.FrontLabel_3.HorizontalAlignment = 'center';
+            app.FrontLabel_3.Position = [23 16 37 22];
+            app.FrontLabel_3.Text = 'Front:';
+
+            % Create RearLabel_2
+            app.RearLabel_2 = uilabel(app.Tab);
+            app.RearLabel_2.HorizontalAlignment = 'center';
+            app.RearLabel_2.Position = [114 16 35 22];
+            app.RearLabel_2.Text = 'Rear:';
+
+            % Create RearHubDistance
+            app.RearHubDistance = uieditfield(app.Tab, 'numeric');
+            app.RearHubDistance.HorizontalAlignment = 'center';
+            app.RearHubDistance.Position = [156 16 40 22];
+            app.RearHubDistance.Value = 54.125;
+
+            % Create Tab_2
+            app.Tab_2 = uitab(app.TabGroup);
+            app.Tab_2.AutoResizeChildren = 'off';
+            app.Tab_2.Title = '6';
+
+            % Create Tab_3
+            app.Tab_3 = uitab(app.TabGroup);
+            app.Tab_3.Title = '8';
+
+            % Show the figure after all components are created
+            app.UIFigure.Visible = 'on';
+        end
+    end
+
+    % App creation and deletion
+    methods (Access = public)
+
+        % Construct app
+        function app = uhfsae_data_acquisition_system
+
+            % Create UIFigure and components
+            createComponents(app)
+
+            % Register the app with App Designer
+            registerApp(app, app.UIFigure)
+
+            % Execute the startup function
+            runStartupFcn(app, @startupFcn)
+
+            if nargout == 0
+                clear app
+            end
+        end
+
+        % Code that executes before app deletion
+        function delete(app)
+
+            % Delete UIFigure when app is deleted
+            delete(app.UIFigure)
+        end
+    end
+end
